@@ -1,12 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, MenuController, Nav } from 'ionic-angular';
-
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ListPage } from '../pages/list/list';
+import { Platform, MenuController, Nav, AlertController } from 'ionic-angular';
+import { ExplorePage } from '../pages/explore/explore';
+import { HomePage } from '../pages/home/home';
+import { SignupPage } from '../pages/signup/signup';
+import { PolicyPage } from '../pages/policy/policy';
+import { ProfilePage } from '../pages/profile/profile';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { GiftVoucherPage } from '../pages/gift-voucher/gift-voucher';
+import { AboutPage } from '../pages/about/about';
 
 
 @Component({
@@ -16,22 +20,33 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   // make HelloIonicPage the root (or first) page
-  rootPage = HelloIonicPage;
-  pages: Array<{title: string, component: any}>;
+  rootPage;
+  pages: Array<{ title: string, component: any }>;
 
   constructor(
     public platform: Platform,
     public menu: MenuController,
     public statusBar: StatusBar,
-    public splashScreen: SplashScreen
+    public splashScreen: SplashScreen,
+    public alertCtrl: AlertController,
   ) {
     this.initializeApp();
-
+    //localStorage.setItem('token', '4141');
     // set our app's pages
     this.pages = [
-      { title: 'Hello Ionic', component: HelloIonicPage },
-      { title: 'My First List', component: ListPage }
+      { title: 'Home', component: HomePage },
+      { title: 'Profile', component: ProfilePage },
+      { title: 'Explore', component: ExplorePage },
+      { title: 'SignUp', component: SignupPage },
+      { title: 'About', component: AboutPage },
+      { title: 'Gift', component: GiftVoucherPage },
     ];
+    splashScreen.show();
+    if (this.splashScreen) {
+      setTimeout(() => {
+        this.splashScreen.hide();
+      }, 2000);
+    }
   }
 
   initializeApp() {
@@ -39,7 +54,12 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      let userId = localStorage.getItem('userId');
+      if (userId != '' && userId != undefined) {
+        this.rootPage = HomePage;
+      } else {
+        this.rootPage = SignupPage;
+      }
     });
   }
 
@@ -49,4 +69,5 @@ export class MyApp {
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }
+
 }
