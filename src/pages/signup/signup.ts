@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, MenuController, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, MenuController, LoadingController, Platform, AlertController,ToastController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { AuthProvider } from '../../providers/auth/auth';
 
@@ -8,15 +8,48 @@ import { AuthProvider } from '../../providers/auth/auth';
   templateUrl: 'signup.html',
 })
 export class SignupPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController, public auth: AuthProvider, public loadingCtrl: LoadingController) {
+  height;
+  width;
+  domainPage = true;
+  signInPage = false;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController, public auth: AuthProvider, public loadingCtrl: LoadingController, public platform: Platform, public alertCtrl: AlertController,public toastCtrl:ToastController) {
     this.menu.swipeEnable(false);
+
+    this.height = this.platform.height();
+    this.width = this.platform.width();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SignupPage');
   }
-
+  addDomain(value) {
+    var domainName = value.replace('www.', '');
+    domainName = value.replace('WWW.', '');
+    const confirm = this.alertCtrl.create({
+      title: 'Confirmation',
+      message: "Are you sure it's correct domain : http://" + domainName,
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+            this.domainPage = true;
+            this.signInPage = false;
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            console.log('Agree clicked');
+            localStorage.setItem('domain', domainName);
+            this.domainPage = false;
+            this.signInPage = true;
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
   ShowOtp = false;
   showOtpDiv = false;
   otp: any;
@@ -39,11 +72,12 @@ export class SignupPage {
       console.log(data);
       if (data.status == 'Sent OTP') {
         loader.dismiss();
-      // this.otp = data.signInOTPList.otp;
+        // this.otp = data.signInOTPList.otp;
         this.tempId = data.user_id;
         this.showOtpDiv = true;
         this.ShowOtp = false;
       } else {
+		  this.presentToast('Number doesnot exists.','top')
         loader.dismiss();
         this.showOtpDiv = false;
         this.ShowOtp = true;
@@ -51,6 +85,14 @@ export class SignupPage {
     });
   }
 
+  presentToast(message, position) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 2000,
+      position: position
+    });
+    toast.present();
+  }
   next(el) {
     el.setFocus();
   }
@@ -60,9 +102,11 @@ export class SignupPage {
     let newOtp = val.otp1 + '' + val.otp2 + '' + val.otp3 + '' + val.otp4;
     // this.navCtrl.push(HomePage);
     console.log(newOtp + '==' + this.otp);
-    this.auth.verify(newOtp,this.tempId).then((data: any) => {
+    this.auth.verify(newOtp, this.tempId).then((data: any) => {
       if (data.status == 'success') {
-        localStorage.setItem('userId', this.tempId);
+        var name = data.first_name + ' ' + data.last_name;
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userId', data.user_id);
         this.auth.getCards(1, '').then((data: any) => {
           if (data.cardDetails != null) {
             this.res.push(data);
@@ -72,9 +116,10 @@ export class SignupPage {
             }, 100);
           }
         });
-      } else { }
+      } else {
+        localStorage.clear();
+      }
     });
   }
 
 }
-

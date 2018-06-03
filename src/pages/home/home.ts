@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, Platform, MenuController, Content, ToastController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Platform, MenuController, ToastController } from 'ionic-angular';
 
 import { GiftPage } from '../gift/gift';
 import { AboutPage } from '../about/about';
@@ -21,32 +21,20 @@ import { GiftVoucherPage } from '../gift-voucher/gift-voucher';
   templateUrl: 'home.html',
 })
 export class HomePage {
-  @ViewChild(Content) content: Content;
   cards: any = [];
   PrevCards: any = [];
   items: any = [];
   constructor(public menu: MenuController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public auth: AuthProvider, public platform: Platform, public toastCtrl: ToastController) {
-    this.menu.swipeEnable(true);
+    this.menu.swipeEnable(false);
     setTimeout(() => {
       this.cards = JSON.parse(localStorage.getItem('cards'));
     }, 300)
-    setTimeout(() => {
-      for (let i = 0; i < 100; i++) {
-        this.items[i] = i;
-      }
-    }, 300)
-  }
-  callFunction() {
-    this.content.scrollToBottom(0);
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
   }
   ionViewDidEnter() {
-    //    this.content.scrollToBottom(300);//300ms animation speed
-    setTimeout(() => {
-      this.showNextEvent(1, '');
-    }, 300)
+  
   }
   showNextEvent(flowId, optId) {
     if (localStorage.getItem('cards')) {

@@ -12,35 +12,92 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding-bottom class="bg">
-    <div class="" style="height:calc(640px - 60%);"></div>
- <!--    <ion-list>
-        <ion-item *ngFor="let item of items; let last = last">
-            {{item}}{{last}} {{last ? callFunction() : ''}}
-        </ion-item>
-    </ion-list> -->
-    <div padding-left padding-right class="clearfix cardDiv" *ngFor="let card of cards ; let i = index;let last = last;" (click)="last ? callFunction() : ''">
-        <div class="system">
-            <img src="assets/imgs/budyy_chat.png" class="Sicon" />
-            <div *ngFor="let schat of card.cardDetails">
-                <p class="chat" *ngIf="schat.messageType =='text'">{{schat.messageText}}</p>
-                <div pr *ngIf="schat.messageType =='img'" style="display: inline-block;">
-                    <div class="chatImg">
-                        <img src="{{schat.messageText}}" />
+    <div class="wrap" [style.height.px]="height" [style.width.px]="width">
+        <div class="cell">
+            <div padding-left padding-right class="clearfix cardDiv" *ngFor="let card of cards ; let i = index;">
+                <div class="system">
+                    <img src="assets/imgs/budyy_chat.png" class="Sicon" />
+                    <div *ngFor="let schat of card.cardDetails">
+                        <p class="chat" *ngIf="schat.messageType =='text'">{{schat.messageText}}</p>
+                        <div pr *ngIf="schat.messageType =='img'" style="display: inline-block;">
+                            <div class="chatImg">
+                                <img src="{{schat.messageText}}" />
+                            </div>
+                            <ion-icon name="ios-arrow-round-down" class="download" center></ion-icon>
+                        </div>
+                        <!--<div *ngIf="schat.messageType =='date'" style="display: inline-block;">
+                            <ion-item>
+                                <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="birthDate" (ionCancel)="cancelDate(birthDate)" (ionChange)="setDate(birthDate)"
+                                    placeHolder="Please select Birth date.."></ion-datetime>
+                            </ion-item>
+                        </div>
+                        <div *ngIf="schat.messageType =='leadership'" style="display: inline-block;">
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col col-4 auto>
+                                        <p class="leadershipMsg">Leaders at Greentin is provided by its Executive Committee and Board of Directors
+                                            with the aim of determining and implementing the Group's strategic direction.</p>
+                                        <img src="assets/imgs/arrow_ic.png" alt="Arrow" class="leaderArrow">
+                                    </ion-col>
+                                    <ion-col col-8 auto>
+                                        <ion-slides pager="false">
+                                            <ion-slide>
+                                                <ion-grid>
+                                                    <ion-row>
+                                                        <ion-col col-6 auto>
+                                                            <div class="">
+                                                                <div pr block class="leader">
+                                                                    <img src="assets/imgs/default_profile.png" class="leaderImg">
+                                                                    <ion-icon name="add" class="show" mini (click)="goLeaderPage()"></ion-icon>
+                                                                </div>
+                                                                <div class="userDesc">
+                                                                    <span class="leaderName">Raj Dubal</span>
+                                                                    Founder and Cheif Executive Officer
+                                                                </div>
+                                                            </div>
+                                                        </ion-col>
+                                                        <ion-col col-6 auto>
+                                                            <div class="">
+                                                                <div pr block class="leader">
+                                                                    <img src="assets/imgs/default_profile.png" class="leaderImg">
+                                                                    <ion-icon name="add" class="show" mini></ion-icon>
+                                                                </div>
+                                                                <div class="userDesc">
+                                                                    <span class="leaderName">Raj Dubal</span>
+                                                                    Founder and Cheif Executive Officer
+                                                                </div>
+                                                            </div>
+                                                        </ion-col>
+                                                    </ion-row>
+                                                </ion-grid>
+                                            </ion-slide>
+                                        </ion-slides>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </div>
+                        <p class="chat" pr *ngIf="schat.messageType =='link'">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
+                            type and scrambled it to make a type specimen book. It has survived not only five centuries,
+                            but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised
+                            in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently
+                            with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            <span class="read" (click)="goSafety()">Read More</span>
+                        </p>-->
                     </div>
-                    <ion-icon name="ios-arrow-round-down" class="download" center></ion-icon>
                 </div>
-            </div>
-        </div>
-        <div class="user clearfix">
-            <div class="clearfix" *ngIf="card.reply == null">
-                <p class="chat noBorder" *ngFor="let opt of card.optionsList">
-                    <button ion-button round small (click)="optClick(opt,i)">{{opt.optionText}}</button>
-                </p>
-            </div>
-            <div class="clearfix" *ngIf="card.reply != null">
-                <img src="assets/imgs/default_profile.png" class="Uicon" />
-                <div>
-                    <p class="chat" style="text-transform: capitalize;">{{card.reply.optionText}}</p>
+                <div class="user clearfix">
+                    <div class="clearfix" *ngIf="card.reply == null">
+                        <p class="chat noBorder" *ngFor="let opt of card.optionsList">
+                            <button ion-button round small (click)="optClick(opt,i)">{{opt.optionText}}</button>
+                        </p>
+                    </div>
+                    <div class="clearfix" *ngIf="card.reply != null">
+                        <img src="assets/imgs/default_profile.png" class="Uicon" />
+                        <div>
+                            <p class="chat" style="text-transform: capitalize;">{{card.reply.optionText}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,7 +200,6 @@
                                 </ion-row>
                             </ion-grid>
                         </ion-slide>
-
                         <ion-slide>
                             <ion-grid>
                                 <ion-row>
@@ -192,7 +248,6 @@
                 <button ion-button round small>Leaves</button>
                 <button ion-button round small>General Policies</button>
             </ion-label>
-
         </div>
         <div class="user clearfix" *ngIf="safety">
             <div class="clearfix">

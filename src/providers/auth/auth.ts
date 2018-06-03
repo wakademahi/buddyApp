@@ -13,7 +13,7 @@ export class AuthProvider {
   constructor(public http: Http) {
     console.log('Hello AuthProvider Provider');
   }
-  authenticate(val) {
+ authenticate(val) {
     return new Promise(resolve => {
       var apiUrl = "HRBuddy/login";
       var objt = { mobile: val };
@@ -25,11 +25,11 @@ export class AuthProvider {
       });
     });
   }
-  verify(val,id) {
+  verify(val, id) {
     return new Promise(resolve => {
       var apiUrl = "HRBuddy/verifyOTP";
       var objt = {
-        "id": id,//localStorage.getItem('userId'),
+        "id": id,
         "otp": val
       }
       console.log(apiUrl + '==' + JSON.stringify(objt));
